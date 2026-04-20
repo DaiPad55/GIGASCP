@@ -1,26 +1,27 @@
 {
-  "id": "/chromebook-trouble-report/",
+  "id": "/GIGASCP/",
   "name": "Chromebook トラブル報告フォーム",
   "short_name": "トラブル報告",
-  "start_url": "./index.html",
+  "start_url": "/GIGASCP/",
+  "scope": "/GIGASCP/",
   "display": "standalone",
   "background_color": "#e7f1ef",
   "theme_color": "#0f766e",
   "icons": [
     {
-      "src": "./icons/icon-192x192.png",
+      "src": "/GIGASCP/icons/icon-192x192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "./icons/icon-512x512.png",
+      "src": "/GIGASCP/icons/icon-512x512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "./icons/icon-512-maskable.png",
+      "src": "/GIGASCP/icons/icon-512-maskable.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
