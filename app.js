@@ -1,5 +1,5 @@
 const GAS_WEB_APP_URL =
-  "https://script.google.com/macros/s/AKfycbxy2A0MFDULOOnPhZpHA637C0aUHt7nGZUZtjOsAHve1pjCIilZQaELeVA1dQ6g_iv7/exec";
+  "https://script.google.com/macros/s/AKfycbx9HrX7xqQA0-E0g7tOlju_F1F4SRAZrOuMGPoj4_yMQ4EEHk0SbgqF6HfKQmeObOya/exec";
 
 document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("reportForm");
