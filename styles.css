@@ -1,0 +1,48 @@
+body {
+  font-family: system-ui, sans-serif;
+  background: #f8fafc;
+  margin: 0;
+}
+
+.container {
+  max-width: 900px;
+  margin: auto;
+  padding: 16px;
+}
+
+.card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+.hero {
+  border-top: 6px solid #0f766e;
+}
+
+.req {
+  color: red;
+}
+
+.checkbox-group {
+  display: grid;
+  gap: 8px;
+}
+
+.two-col {
+  grid-template-columns: 1fr 1fr;
+}
+
+.trouble-detail {
+  background: #fffbeb;
+  border-left: 6px solid #facc15;
+}
+
+.status.ok {
+  color: green;
+}
+
+.status.error {
+  color: red;
+}
