@@ -1,0 +1,328 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chromebook トラブル報告フォーム</title>
+  <meta name="theme-color" content="#0f766e" />
+  <link rel="manifest" href="./manifest.webmanifest" />
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <main class="container">
+    <header class="card hero">
+      <h1>Chromebook トラブル報告フォーム</h1>
+      <p class="lead">
+        学校現場で利用している Chromebook にトラブルが発生した際、
+        担当教員が内容を入力して送信するための報告フォームです。
+      </p>
+      <p class="note">
+        送信後、設定した宛先へメールを自動送信します。
+      </p>
+    </header>
+
+    <form id="reportForm" class="form">
+      <section class="card">
+        <label for="deviceId">トラブル端末番号 <span class="req">*</span></label>
+        <input
+          id="deviceId"
+          name="deviceId"
+          type="text"
+          placeholder="例：0000PC0000"
+          required
+        />
+      </section>
+
+      <section class="card">
+        <label for="schoolName">学校名 <span class="req">*</span></label>
+        <select id="schoolName" name="schoolName" required>
+          <option value="">選択してください</option>
+          <option value="不動小学校">不動小学校</option>
+          <option value="徳田小学校">徳田小学校</option>
+          <option value="矢巾東小学校">矢巾東小学校</option>
+          <option value="煙山小学校">煙山小学校</option>
+          <option value="矢巾中学校">矢巾中学校</option>
+          <option value="矢巾北中学校">矢巾北中学校</option>
+        </select>
+      </section>
+
+      <section class="card">
+        <label for="teacherName">担当者名 <span class="req">*</span></label>
+        <input
+          id="teacherName"
+          name="teacherName"
+          type="text"
+          placeholder="例：山田 太郎"
+          required
+        />
+      </section>
+
+      <section class="card">
+        <label>トラブルの種類（複数選択可） <span class="req">*</span></label>
+        <div class="checkbox-group two-col">
+          <label><input type="checkbox" name="troubleTypes" value="充電できない" />充電できない</label>
+          <label><input type="checkbox" name="troubleTypes" value="ログインできない" />ログインできない</label>
+          <label><input type="checkbox" name="troubleTypes" value="起動しない" />起動しない</label>
+          <label><input type="checkbox" name="troubleTypes" value="使用中にフリーズする" />使用中にフリーズする</label>
+          <label><input type="checkbox" name="troubleTypes" value="タッチパネル・タッチパッドが反応しない" />タッチパネル・タッチパッドが反応しない</label>
+          <label><input type="checkbox" name="troubleTypes" value="キーボードが使えない" />キーボードが使えない</label>
+          <label><input type="checkbox" name="troubleTypes" value="カメラが起動しない・色がおかしい" />カメラが起動しない・色がおかしい</label>
+          <label><input type="checkbox" name="troubleTypes" value="物理破損（落下、圧迫等）" />物理破損（落下、圧迫等）</label>
+          <label><input type="checkbox" name="troubleTypes" value="本体が異常に熱い・バッテリー膨張" />本体が異常に熱い・バッテリー膨張</label>
+          <label><input type="checkbox" name="troubleTypes" value="ネットワークに繋がらない" />ネットワークに繋がらない</label>
+          <label><input type="checkbox" name="troubleTypes" value="その他" />その他</label>
+        </div>
+        <p id="troubleTypesError" class="error-message" hidden>
+          トラブルの種類を1つ以上選択してください。
+        </p>
+      </section>
+
+      <!-- 充電できない -->
+      <section class="card trouble-detail" data-type="充電できない" hidden>
+        <label>充電できない：追加選択</label>
+        <div class="checkbox-group nested">
+          <label>
+            <input type="checkbox" name="chargeDetails" value="充電のLEDが点灯しない" />
+            充電のLEDが点灯しない
+          </label>
+          <label>
+            <input type="checkbox" name="chargeDetails" value="充電棚で充電できない" />
+            充電棚で充電できない
+          </label>
+          <label>
+            <input type="checkbox" name="chargeDetails" value="どの充電器でも充電できない" />
+            どの充電器でも充電できない
+          </label>
+        </div>
+      </section>
+
+      <!-- ログインできない -->
+      <section class="card trouble-detail" data-type="ログインできない" hidden>
+        <label>ログインできない：追加選択</label>
+        <div class="checkbox-group nested">
+          <label>
+            <input
+              type="checkbox"
+              name="loginDetails"
+              value="ID/PWを入れてもログインできない（他の端末ではログインできる）"
+            />
+            ID/PWを入れてもログインできない（他の端末ではログインできる）
+          </label>
+          <label>
+            <input type="checkbox" name="loginDetails" value="QRでログインできない" />
+            QRでログインできない
+          </label>
+          <label>
+            <input type="checkbox" name="loginDetails" value="ログイン画面までいかない" />
+            ログイン画面までいかない
+          </label>
+        </div>
+      </section>
+
+      <!-- 起動しない -->
+      <section class="card trouble-detail" data-type="起動しない" hidden>
+        <label>起動しない：追加選択</label>
+        <div class="checkbox-group nested">
+          <label>
+            <input type="checkbox" name="bootDetails" value="電源LEDがつかない" />
+            電源LEDがつかない
+          </label>
+          <label>
+            <input type="checkbox" name="bootDetails" value="メーカーロゴまではでる" />
+            メーカーロゴまではでる
+          </label>
+          <label>
+            <input type="checkbox" name="bootDetails" value="画面がつくだけ" />
+            画面がつくだけ
+          </label>
+        </div>
+      </section>
+
+      <!-- 使用中にフリーズする -->
+      <section class="card trouble-detail" data-type="使用中にフリーズする" hidden>
+        <label>使用中にフリーズする：追加選択</label>
+        <div class="checkbox-group nested">
+          <label>
+            <input type="checkbox" name="freezeDetails" value="アプリがフリーズする" />
+            アプリがフリーズする
+          </label>
+          <label>
+            <input type="checkbox" name="freezeDetails" value="システムがフリーズする" />
+            システムがフリーズする
+          </label>
+          <label>
+            <input type="checkbox" name="freezeDetails" value="特定のWebページがフリーズする" />
+            特定のWebページがフリーズする
+          </label>
+        </div>
+      </section>
+
+      <!-- タッチパネル・タッチパッドが反応しない -->
+      <section class="card trouble-detail" data-type="タッチパネル・タッチパッドが反応しない" hidden>
+        <label>タッチパネル・タッチパッドが反応しない：追加選択</label>
+        <div class="checkbox-group nested">
+          <label>
+            <input type="checkbox" name="touchDetails" value="タッチパネルが使えない（反応が悪い）" />
+            タッチパネルが使えない（反応が悪い）
+          </label>
+          <label>
+            <input type="checkbox" name="touchDetails" value="タッチパッドが使えない（反応が悪い）" />
+            タッチパッドが使えない（反応が悪い）
+          </label>
+        </div>
+      </section>
+
+      <!-- キーボードが使えない -->
+      <section class="card trouble-detail" data-type="キーボードが使えない" hidden>
+        <label>キーボードが使えない：追加選択</label>
+        <div class="checkbox-group nested">
+          <label>
+            <input type="checkbox" name="keyboardDetails" value="特定のキーが使えない" />
+            特定のキーが使えない
+          </label>
+          <label>
+            <input type="checkbox" name="keyboardDetails" value="特定の列が使えない" />
+            特定の列が使えない
+          </label>
+          <label>
+            <input type="checkbox" name="keyboardDetails" value="キーボード自体が使えない" />
+            キーボード自体が使えない
+          </label>
+        </div>
+      </section>
+
+      <!-- カメラが起動しない・色がおかしい -->
+      <section class="card trouble-detail" data-type="カメラが起動しない・色がおかしい" hidden>
+        <label>カメラが起動しない・色がおかしい：追加選択</label>
+        <div class="checkbox-group nested">
+          <label>
+            <input type="checkbox" name="cameraDetails" value="カメラアプリが起動しない" />
+            カメラアプリが起動しない
+          </label>
+          <label>
+            <input type="checkbox" name="cameraDetails" value="カメラ映像が出ない" />
+            カメラ映像が出ない
+          </label>
+          <label>
+            <input type="checkbox" name="cameraDetails" value="カメラの切り替えができない" />
+            カメラの切り替えができない
+          </label>
+        </div>
+      </section>
+
+      <!-- 物理破損（落下、圧迫等） -->
+      <section class="card trouble-detail" data-type="物理破損（落下、圧迫等）" hidden>
+        <label>物理破損（落下、圧迫等）：追加選択</label>
+        <div class="checkbox-group nested">
+          <label>
+            <input type="checkbox" name="damageDetails" value="画面の破損" />
+            画面の破損
+          </label>
+          <label>
+            <input type="checkbox" name="damageDetails" value="本体の割れ" />
+            本体の割れ
+          </label>
+          <label>
+            <input type="checkbox" name="damageDetails" value="その他の破損" />
+            その他の破損
+          </label>
+        </div>
+      </section>
+
+      <!-- 本体が異常に熱い・バッテリー膨張 -->
+      <section class="card trouble-detail danger-detail" data-type="本体が異常に熱い・バッテリー膨張" hidden>
+        <label>本体が異常に熱い・バッテリー膨張：追加選択</label>
+        <div class="checkbox-group nested">
+          <label>
+            <input type="checkbox" name="heatDetails" value="充電時異常に高温になる" />
+            充電時異常に高温になる
+          </label>
+          <label>
+            <input
+              type="checkbox"
+              name="heatDetails"
+              value="バッテリーが膨らんできて本体が開いてきてる"
+            />
+            バッテリーが膨らんできて本体が開いてきてる
+          </label>
+          <label>
+            <input type="checkbox" name="heatDetails" value="異臭、発煙等があった" />
+            異臭、発煙等があった
+          </label>
+        </div>
+        <p class="danger-note">
+          ※ 異常発熱・膨張・異臭がある場合は使用を中止し、安全を確保してください。
+        </p>
+      </section>
+
+      <!-- ネットワークに繋がらない -->
+      <section class="card trouble-detail" data-type="ネットワークに繋がらない" hidden>
+        <label>ネットワークに繋がらない：追加選択</label>
+        <div class="checkbox-group nested">
+          <label>
+            <input
+              type="checkbox"
+              name="networkDetails"
+              value="WiFiが切れやすい（症状に一定な特徴があれば記載してください）"
+            />
+            WiFiが切れやすい（症状に一定な特徴があれば記載してください）
+          </label>
+          <label>
+            <input type="checkbox" name="networkDetails" value="特定のページが表示できない" />
+            特定のページが表示できない
+          </label>
+        </div>
+        <label for="networkPattern" class="sub-label">症状の特徴・発生条件</label>
+        <textarea
+          id="networkPattern"
+          name="networkPattern"
+          rows="3"
+          placeholder="例：2階教室のみ切れやすい、朝だけ発生、特定SSIDで不安定 など"
+        ></textarea>
+      </section>
+
+      <!-- その他 -->
+      <section class="card trouble-detail" data-type="その他" hidden>
+        <label>その他：追加選択</label>
+        <div class="checkbox-group nested">
+          <label>
+            <input
+              type="checkbox"
+              name="otherTypeDetails"
+              value="その他の症状に詳細を記載してください"
+            />
+            その他の症状に詳細を記載してください
+          </label>
+        </div>
+      </section>
+
+<section class="card">
+  <label for="otherDetails">その他症状</label>
+  <textarea
+    id="otherDetails"
+    name="otherDetails"
+    rows="5"
+    style="width: 100%; box-sizing: border-box;"
+    placeholder="補足症状があれば入力してください"
+  ></textarea>
+  <p id="otherDetailsHint" class="field-hint" hidden>
+    「その他」を選択した場合は、症状の詳細を入力してください。
+  </p>
+</section>
+
+      <section class="card">
+        <label for="occurredAt">トラブル発生日時 <span class="req">*</span></label>
+        <input id="occurredAt" name="occurredAt" type="datetime-local" required />
+      </section>
+
+      <section class="card actions">
+        <button id="submitButton" type="submit">送信する</button>
+        <p id="statusMessage" class="status" aria-live="polite"></p>
+      </section>
+    </form>
+  </main>
+
+  <script src="./app.js"></script>
+</body>
+</html>
+``
