@@ -80,6 +80,7 @@
       <!-- 充電できない -->
       <section class="card trouble-detail" data-type="充電できない" hidden>
         <label>充電できない：追加選択</label>
+        <p class="trouble-note">↻を押しながら電源ボタンを数秒押してみると解決する場合があります。</p>
         <div class="checkbox-group nested">
           <label>
             <input type="checkbox" name="chargeDetails" value="充電のLEDが点灯しない" />
@@ -99,6 +100,7 @@
       <!-- ログインできない -->
       <section class="card trouble-detail" data-type="ログインできない" hidden>
         <label>ログインできない：追加選択</label>
+        <p class="trouble-note">教育委員会対応になります。</p>
         <div class="checkbox-group nested">
           <label>
             <input
@@ -122,6 +124,7 @@
       <!-- 起動しない -->
       <section class="card trouble-detail" data-type="起動しない" hidden>
         <label>起動しない：追加選択</label>
+        <p class="trouble-note">↻を押しながら電源ボタンを数秒押してみると解決する場合があります。</p>
         <div class="checkbox-group nested">
           <label>
             <input type="checkbox" name="bootDetails" value="電源LEDがつかない" />
@@ -141,6 +144,7 @@
       <!-- 使用中にフリーズする -->
       <section class="card trouble-detail" data-type="使用中にフリーズする" hidden>
         <label>使用中にフリーズする：追加選択</label>
+        <p class="trouble-note">再起動をすると改善する場合があります。</p>
         <div class="checkbox-group nested">
           <label>
             <input type="checkbox" name="freezeDetails" value="アプリがフリーズする" />
@@ -160,6 +164,7 @@
       <!-- タッチパネル・タッチパッドが反応しない -->
       <section class="card trouble-detail" data-type="タッチパネル・タッチパッドが反応しない" hidden>
         <label>タッチパネル・タッチパッドが反応しない：追加選択</label>
+        <p class="trouble-note">再起動をすると改善する場合があります。</p>
         <div class="checkbox-group nested">
           <label>
             <input type="checkbox" name="touchDetails" value="タッチパネルが使えない（反応が悪い）" />
@@ -175,6 +180,7 @@
       <!-- キーボードが使えない -->
       <section class="card trouble-detail" data-type="キーボードが使えない" hidden>
         <label>キーボードが使えない：追加選択</label>
+        <p class="trouble-note">再起動をすると改善する場合があります。</p>
         <div class="checkbox-group nested">
           <label>
             <input type="checkbox" name="keyboardDetails" value="特定のキーが使えない" />
@@ -194,6 +200,7 @@
       <!-- カメラが起動しない・色がおかしい -->
       <section class="card trouble-detail" data-type="カメラが起動しない・色がおかしい" hidden>
         <label>カメラが起動しない・色がおかしい：追加選択</label>
+        <p class="trouble-note">再起動をすると改善する場合があります。</p>
         <div class="checkbox-group nested">
           <label>
             <input type="checkbox" name="cameraDetails" value="カメラアプリが起動しない" />
@@ -213,6 +220,7 @@
       <!-- 物理破損（落下、圧迫等） -->
       <section class="card trouble-detail" data-type="物理破損（落下、圧迫等）" hidden>
         <label>物理破損（落下、圧迫等）：追加選択</label>
+        <p class="trouble-note">教育委員会対応になります。</p>
         <div class="checkbox-group nested">
           <label>
             <input type="checkbox" name="damageDetails" value="画面の破損" />
@@ -258,6 +266,7 @@
       <!-- ネットワークに繋がらない -->
       <section class="card trouble-detail" data-type="ネットワークに繋がらない" hidden>
         <label>ネットワークに繋がらない：追加選択</label>
+        <p class="trouble-note">Wi-Fiを一度オフにし再度オンにすると改善する場合があります。</p>
         <div class="checkbox-group nested">
           <label>
             <input
@@ -277,7 +286,7 @@
           id="networkPattern"
           name="networkPattern"
           rows="3"
-         style="width: 100%; box-sizing: border-box;"
+          style="width: 100%; box-sizing: border-box;"
           placeholder="例：2階教室のみ切れやすい、朝だけ発生、特定SSIDで不安定 など"
         ></textarea>
       </section>
@@ -297,19 +306,19 @@
         </div>
       </section>
 
-<section class="card">
-  <label for="otherDetails">その他症状</label>
-  <textarea
-    id="otherDetails"
-    name="otherDetails"
-    rows="5"
-    style="width: 100%; box-sizing: border-box;"
-    placeholder="補足症状があれば入力してください"
-  ></textarea>
-  <p id="otherDetailsHint" class="field-hint" hidden>
-    「その他」を選択した場合は、症状の詳細を入力してください。
-  </p>
-</section>
+      <section class="card">
+        <label for="otherDetails">その他症状</label>
+        <textarea
+          id="otherDetails"
+          name="otherDetails"
+          rows="5"
+          style="width: 100%; box-sizing: border-box;"
+          placeholder="補足症状があれば入力してください"
+        ></textarea>
+        <p id="otherDetailsHint" class="field-hint" hidden>
+          「その他」を選択した場合は、症状の詳細を入力してください。
+        </p>
+      </section>
 
       <section class="card">
         <label for="occurredAt">トラブル発生日時 <span class="req">*</span></label>
@@ -326,4 +335,3 @@
   <script src="./app.js"></script>
 </body>
 </html>
-``
