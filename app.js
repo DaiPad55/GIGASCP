@@ -7,6 +7,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const statusMessage = document.getElementById("statusMessage");
   const occurredAt = document.getElementById("occurredAt");
   const otherDetails = document.getElementById("otherDetails");
+  const attachmentsInput = document.getElementById("attachments");
   const otherDetailsHint = document.getElementById("otherDetailsHint");
   const troubleTypesError = document.getElementById("troubleTypesError");
 
@@ -90,6 +91,46 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+
+  function fileToAttachment(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => {
+        const result = String(reader.result || "");
+        const base64 = result.includes(",") ? result.split(",")[1] : result;
+        resolve({
+          fileName: file.name,
+          mimeType: file.type || "application/octet-stream",
+          size: file.size,
+          data: base64
+        });
+      };
+      reader.onerror = () => reject(new Error("添付ファイルの読み込みに失敗しました。"));
+      reader.readAsDataURL(file);
+    });
+  }
+
+  async function readAttachments() {
+    if (!attachmentsInput || !attachmentsInput.files || attachmentsInput.files.length === 0) {
+      return [];
+    }
+
+    const files = Array.from(attachmentsInput.files);
+    const maxFileCount = 3;
+    const maxTotalSize = 8 * 1024 * 1024;
+    const totalSize = files.reduce((sum, file) => sum + file.size, 0);
+
+    if (files.length > maxFileCount) {
+      throw new Error(`添付ファイルは${maxFileCount}個までにしてください。`);
+    }
+
+    if (totalSize > maxTotalSize) {
+      throw new Error("添付ファイルの合計サイズは8MB以下にしてください。");
+    }
+
+    return Promise.all(files.map(fileToAttachment));
+  }
+
   function validateTroubleTypes() {
     const isValid = getSelectedTroubleTypes().length > 0;
 
@@ -100,7 +141,7 @@ document.addEventListener("DOMContentLoaded", () => {
     return isValid;
   }
 
-  function buildPayload() {
+  async function buildPayload() {
     return {
       deviceId: document.getElementById("deviceId")?.value.trim() || "",
       schoolName: document.getElementById("schoolName")?.value || "",
@@ -125,6 +166,7 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById("networkPattern")?.value.trim() || "",
       otherDetails:
         document.getElementById("otherDetails")?.value.trim() || "",
+      attachments: await readAttachments(),
       occurredAt:
         document.getElementById("occurredAt")?.value || "",
       submittedAt: new Date().toISOString(),
@@ -151,10 +193,10 @@ document.addEventListener("DOMContentLoaded", () => {
     setStatus("送信中です…");
 
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 15000);
+    const timeoutId = setTimeout(() => controller.abort(), 60000);
 
     try {
-      const payload = buildPayload();
+      const payload = await buildPayload();
 
       const response = await fetch(GAS_WEB_APP_URL, {
         method: "POST",

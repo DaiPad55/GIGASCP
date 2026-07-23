@@ -320,6 +320,20 @@
         </p>
       </section>
 
+
+      <section class="card">
+        <label for="attachments">ファイル添付</label>
+        <input
+          id="attachments"
+          name="attachments"
+          type="file"
+          accept="image/*,.pdf"
+          multiple
+        />
+        <p class="field-hint">
+          写真またはPDFを添付できます。添付ファイルはGoogleドライブに保存し、メール本文に共有リンクを記載します。
+        </p>
+      </section>
       <section class="card">
         <label for="occurredAt">トラブル発生日時 <span class="req">*</span></label>
         <input id="occurredAt" name="occurredAt" type="datetime-local" required />
