@@ -4,6 +4,7 @@ const GAS_WEB_APP_URL =
 document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("reportForm");
   const submitButton = document.getElementById("submitButton");
+  const savePdfButton = document.getElementById("savePdfButton");
   const statusMessage = document.getElementById("statusMessage");
   const occurredAt = document.getElementById("occurredAt");
   const otherDetails = document.getElementById("otherDetails");
@@ -141,7 +142,8 @@ document.addEventListener("DOMContentLoaded", () => {
     return isValid;
   }
 
-  async function buildPayload() {
+  async function buildPayload(options = {}) {
+    const includeAttachments = options.includeAttachments !== false;
     return {
       deviceId: document.getElementById("deviceId")?.value.trim() || "",
       schoolName: document.getElementById("schoolName")?.value || "",
@@ -166,12 +168,96 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById("networkPattern")?.value.trim() || "",
       otherDetails:
         document.getElementById("otherDetails")?.value.trim() || "",
-      attachments: await readAttachments(),
+      attachments: includeAttachments ? await readAttachments() : [],
       occurredAt:
         document.getElementById("occurredAt")?.value || "",
       submittedAt: new Date().toISOString(),
       userAgent: navigator.userAgent
     };
+  }
+
+
+  function downloadBase64File(fileName, mimeType, base64Data) {
+    const binary = atob(base64Data);
+    const bytes = new Uint8Array(binary.length);
+    for (let i = 0; i < binary.length; i += 1) {
+      bytes[i] = binary.charCodeAt(i);
+    }
+
+    const blob = new Blob([bytes], { type: mimeType || "application/pdf" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = fileName || "Chromebookトラブル報告書.pdf";
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    URL.revokeObjectURL(url);
+  }
+
+  async function handleSavePdf() {
+    if (!form) return;
+
+    setStatus("");
+
+    const nativeValid = form.reportValidity();
+    const troubleValid = validateTroubleTypes();
+    if (!nativeValid || !troubleValid) {
+      setStatus("PDF保存前に必須項目を入力してください。", "error");
+      return;
+    }
+
+    if (savePdfButton) {
+      savePdfButton.disabled = true;
+    }
+    setStatus("PDFを作成中です…");
+
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 60000);
+
+    try {
+      const payload = await buildPayload({ includeAttachments: false });
+      payload.action = "generateReportPdf";
+
+      const response = await fetch(GAS_WEB_APP_URL, {
+        method: "POST",
+        redirect: "follow",
+        headers: {
+          "Content-Type": "text/plain;charset=utf-8"
+        },
+        body: JSON.stringify(payload),
+        signal: controller.signal
+      });
+
+      clearTimeout(timeoutId);
+
+      const responseText = await response.text();
+      let data;
+      try {
+        data = JSON.parse(responseText);
+      } catch (parseError) {
+        throw new Error("サーバー応答をJSONとして解釈できませんでした。応答: " + responseText);
+      }
+
+      if (!data.ok) {
+        throw new Error(data.message || "PDF作成に失敗しました。");
+      }
+
+      downloadBase64File(data.fileName, data.mimeType, data.data);
+      setStatus("送信内容PDFを保存しました。", "ok");
+    } catch (error) {
+      clearTimeout(timeoutId);
+      if (error.name === "AbortError") {
+        setStatus("PDF作成タイムアウトです。通信状態または Web アプリ設定を確認してください。", "error");
+      } else {
+        console.error(error);
+        setStatus(`PDF保存エラー: ${error.message}`, "error");
+      }
+    } finally {
+      if (savePdfButton) {
+        savePdfButton.disabled = false;
+      }
+    }
   }
 
   async function handleSubmit(event) {
@@ -245,6 +331,10 @@ document.addEventListener("DOMContentLoaded", () => {
   troubleCheckboxes.forEach((checkbox) => {
     checkbox.addEventListener("change", toggleDetailSections);
   });
+
+  if (savePdfButton) {
+    savePdfButton.addEventListener("click", handleSavePdf);
+  }
 
   if (form) {
     form.addEventListener("submit", handleSubmit);
