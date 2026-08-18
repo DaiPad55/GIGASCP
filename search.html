@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <base target="_top">
+  <style>
+    body { font-family: sans-serif; margin: 40px; }
+    select, input, button { padding: 8px; margin: 5px 0; font-size: 16px; }
+    #result { margin-top: 20px; padding: 15px; border: 1px solid #ccc; }
+    .error { color: red; }
+  </style>
+</head>
+<body>
+  <h2>アカウント検索システム</h2>
+  <p>ログイン中: <?= userName ?>（<?= userEmail ?>）</p>
+
+  <label>学校を選択：</label>
+  <select id="schoolSelect">
+    <? for (var i = 0; i < schools.length; i++) { ?>
+      <option value="<?= schools[i] ?>"><?= schools[i] ?></option>
+    <? } ?>
+  </select>
+  <br>
+
+  <label>検索対象メールアドレス：</label>
+  <input type="text" id="targetEmail" placeholder="example@yahaba.ed.jp">
+  <br>
+
+  <button onclick="doSearch()">検索</button>
+
+  <div id="result"></div>
+
+  <script>
+    async function getClientIp() {
+      try {
+        const res = await fetch("https://api.ipify.org?format=json");
+        const data = await res.json();
+        return data.ip;
+      } catch (e) {
+        return "取得不可";
+      }
+    }
+
+    async function doSearch() {
+      const school = document.getElementById("schoolSelect").value;
+      const target = document.getElementById("targetEmail").value;
+      const ip = await getClientIp();
+      const resultDiv = document.getElementById("result");
+      resultDiv.innerHTML = "検索中...";
+
+      google.script.run.withSuccessHandler(function(res) {
+        if (res.error) {
+          resultDiv.innerHTML = "<p class='error'>" + res.error + "</p>";
+        } else {
+          resultDiv.innerHTML =
+            "<p>名前: " + res.name + "</p>" +
+            "<p>パスワード: " + res.password + "</p>" +
+            "<p>区分: " + res.kubun + "</p>";
+        }
+      }).searchAccount(school, target, ip);
+    }
+  </script>
+</body>
+</html>
